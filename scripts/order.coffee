@@ -1,3 +1,21 @@
+# Description:
+#   Keeps track of users' lunch orders
+#
+# Dependencies:
+#   None
+#
+# Configuration:
+#   None
+#
+# Commands:
+#   hubot call it in - displays everyone's lunch order
+#	hubot clear orders - clears all orders
+#	hubot we lunch at <lunchDestination> - sets a lunch destination, which displays on top of the order list
+#	hubot order me <lunch> - sets a user's lunch order
+#
+# Author:
+#   jmoses
+
 module.exports = (robot) ->
 
 	robot.respond  /call it in/i, (msg) ->
