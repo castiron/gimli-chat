@@ -1,16 +1,31 @@
 module.exports = (robot) ->
 
 	robot.respond  /call it in/i, (msg) ->
-    	out = ''
+
+		if robot.brain.data.lunchDestination?
+	    	out = "\n" + '-------------------------------' + "\n WE LUNCH AT " + robot.brain.data.lunchDestination.toUpperCase() + "\n" + '-------------------------------' + "\n\n"
+	    else
+	    	out = ''
+
+    	hasOrder = false
     	for id, user of robot.users()
     		if user.currentOrder
+    			hasOrder = true
 	    		out = out + user.name + ': ' + user.currentOrder + "\n"
-    	msg.send out
+	    if hasOrder
+	    	msg.send out
+	    else
+	    	msg.send "I can't call it in if nobody's ordered anything."
 
     robot.respond /clear orders/i, (msg) ->
     	for id, user of robot.users()
    			user.currentOrder = null
     	msg.send "Ok, I've cleared all orders"
+
+	robot.respond /we lunch( at)? (.*)/i, (msg) ->
+    	lunchDestination =  msg.match[2]
+    	robot.brain.data.lunchDestination = lunchDestination
+    	msg.send "Ok, we lunch at " + robot.brain.data.lunchDestination
 
 	robot.respond  /(order)( me)? (.*)/i, (msg) ->
 		userName = msg.message.user.name.toLowerCase()
