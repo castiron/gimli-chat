@@ -2,7 +2,10 @@
 	"redis-brain.coffee", 
 	"tweet.coffee", 
 	"shipit.coffee",
-	"9gag.coffee",
 	"abstract.coffee",
-	"ackbar.coffee"
+	"ambush.coffee",
+	"animal.coffee",
+	"ascii.coffee",
+	"availability.coffee",
+	"bang.coffee"
 ]
