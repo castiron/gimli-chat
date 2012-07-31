@@ -35,5 +35,5 @@ module.exports = (robot) ->
 			if users.length is 1
 	        	user = users[0]
 	        	user.currentOrder = userWants
-	        	out = "Ok, " + userName + ", you want " + userWants
+	        	out = "Ok, " + userName.toUpperCase() + ", you want " + userWants
 				msg.send out
