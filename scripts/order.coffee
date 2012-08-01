@@ -54,7 +54,7 @@ module.exports = (robot) ->
 		msg.send "Ok, I've cleared all orders"
 
 	robot.respond /we (lunch|eat)( at)? (.*)/i, (msg) ->
-		lunchDestination =  msg.match[2]
+		lunchDestination =  msg.match[3]
 		robot.brain.data.lunchDestination = lunchDestination
 		msg.send "Ok, we lunch at " + robot.brain.data.lunchDestination
 
