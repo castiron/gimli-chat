@@ -21,7 +21,7 @@ module.exports = (robot) ->
 	robot.respond  /call it in/i, (msg) ->
 
 		if robot.brain.data.lunchDestination?
-	    	out = "\n" + '-------------------------------' + "\n WE LUNCH AT " + robot.brain.data.lunchDestination.toUpperCase() + "\n" + '-------------------------------' + "\n\n"
+	    	out = "\n" + '--------------------------------' + "\n WE LUNCH AT " + robot.brain.data.lunchDestination.toUpperCase() + "\n" + '--------------------------------' + "\n\n"
 	    else
 	    	out = ''
 
