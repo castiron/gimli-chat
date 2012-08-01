@@ -24,4 +24,5 @@
 	"remind.coffee",
 	"script.coffee",
 	"sensitive.coffee"
+	"sms.coffee"
 ]
