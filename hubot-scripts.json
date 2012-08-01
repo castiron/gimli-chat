@@ -5,7 +5,6 @@
 	"abstract.coffee",
 	"ambush.coffee",
 	"animal.coffee",
-	"availability.coffee",
 	"ascii.coffee",
 	"bang.coffee",
 	"bees.coffee",
@@ -24,6 +23,5 @@
 	"redis-brain.coffee",
 	"remind.coffee",
 	"script.coffee",
-	"sensitive.coffee",
-	"sms.coffee"
+	"sensitive.coffee"
 ]
