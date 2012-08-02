@@ -32,6 +32,6 @@ module.exports = (robot) ->
   				console.log err
   			else
   				for i, card of data
-  					out = out + i + '. <a href="' + card.url + '">' + card.name + '</a>' + "\n"
+  					msg.send i + '. <a href="' + card.url + '">' + card.name + '</a>'
 
-  				msg.send out
+  				
