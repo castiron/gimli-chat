@@ -15,7 +15,7 @@
 #	hubot we share <something to share> sets the shared items
 #
 # Author:
-#   jmoses
+#   zdavis, lthurston
 
 module.exports = (robot) ->
 
