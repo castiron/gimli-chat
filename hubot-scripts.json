@@ -23,5 +23,6 @@
 	"redis-brain.coffee",
 	"remind.coffee",
 	"script.coffee",
-	"sensitive.coffee"
+	"sensitive.coffee",
+	"sms.coffee"
 ]
