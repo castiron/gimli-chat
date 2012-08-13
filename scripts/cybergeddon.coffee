@@ -15,6 +15,22 @@
 
 module.exports = (robot) ->
 	robot.hear /cybergeddon/i, (msg) ->
+		doomsday = [
+			'LUNCHTIME',
+			'THE RAPTURE',
+			'ALIEN INVASION',
+			'THE COMMIES ATTACK!',
+			'CHINA TAKES OVER THE WORLD',
+			'ROMNEY SAYS SOMETHING STUPID, AGAIN',
+			"I'LL NEVER TELL!!! MWWAAAAHAHAHAAAAA",
+			'CYBERGEDDON',
+			'CAPTAIN PICARD TURNS INTO A BORG',
+			'STEVE JOBS RETURNS FROM THE DEAD',
+			'TUCKER COMES HOME',
+			'CYBERGEDDON',
+			'MASSIVE EARTHQUAKE ENGULFS PORTLAND',
+		]
+		
 		remaining = new Date('09/25/2012 12:00') - new Date()
 		oneDay = 1000 * 60 * 60 * 24
 		oneHour = 1000 * 60 * 60
@@ -44,5 +60,5 @@ module.exports = (robot) ->
 			msg.send '     ...until...'
 		,11000)
 		setTimeout(->
-			msg.send '     CYBERGEDDON'
+			msg.send '     '+doomsday[Math.floor(Math.random() * doomsday.length)]
 		,16000)
