@@ -24,5 +24,6 @@
 	"remind.coffee",
 	"script.coffee",
 	"sensitive.coffee",
-	"sms.coffee"
+	"sms.coffee",
+	"spotify.coffee"
 ]
