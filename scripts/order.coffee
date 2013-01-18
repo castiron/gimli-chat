@@ -42,6 +42,9 @@ module.exports = (robot) ->
 		else
 			msg.send "I can't call it in if nobody's ordered anything."
 
+	robot.respond /we lunch at gorditos/i, (msg) ->
+		msg.send "[ERROR #108XXH820] Failure to comprehend"
+
 	robot.respond /we share (.*)/i, (msg) ->
 		orderToShare = msg.match[1]
 		robot.brain.data.orderToShare = orderToShare
