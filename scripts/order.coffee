@@ -69,6 +69,6 @@ module.exports = (robot) ->
 				out = "Ok, " + userName + ", you want " + userWants
 				msg.send out
 
-	robot.respond /we (.*) gorditos/i, (msg) ->
-		msg.reply "[ERROR #108XXH820] Failure to comprehend"
-		msg.finish
+#	robot.respond /we (.*) gorditos/i, (msg) ->
+#		msg.reply "[ERROR #108XXH820] Failure to comprehend"
+#		msg.finish
