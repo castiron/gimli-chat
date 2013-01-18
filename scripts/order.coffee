@@ -42,7 +42,7 @@ module.exports = (robot) ->
 		else
 			msg.send "I can't call it in if nobody's ordered anything."
 
-	robot.respond /we lunch at gorditos/i, (msg) ->
+	robot.respond /gorditos/i, (msg) ->
 		msg.reply "[ERROR #108XXH820] Failure to comprehend"
 		msg.finish
 
