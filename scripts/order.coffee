@@ -43,7 +43,8 @@ module.exports = (robot) ->
 			msg.send "I can't call it in if nobody's ordered anything."
 
 	robot.respond /we lunch at gorditos/i, (msg) ->
-		msg.send "[ERROR #108XXH820] Failure to comprehend"
+		msg.reply "[ERROR #108XXH820] Failure to comprehend"
+		msg.finish
 
 	robot.respond /we share (.*)/i, (msg) ->
 		orderToShare = msg.match[1]
