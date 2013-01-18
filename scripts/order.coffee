@@ -42,6 +42,9 @@ module.exports = (robot) ->
 		else
 			msg.send "I can't call it in if nobody's ordered anything."
 
+	robot.respond /banana/i, (msg) ->
+		msg.send "Ok, you're all gonna share a banana"
+
 	robot.respond /we share (.*)/i, (msg) ->
 		orderToShare = msg.match[1]
 		robot.brain.data.orderToShare = orderToShare
