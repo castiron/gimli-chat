@@ -15,7 +15,7 @@
 #	hubot we share <something to share> sets the shared items
 #
 # Author:
-#   zdavis, lthurston
+#   zdavis, lthurston, gblair
 
 module.exports = (robot) ->
 
@@ -41,9 +41,6 @@ module.exports = (robot) ->
 			msg.send out
 		else
 			msg.send "I can't call it in if nobody's ordered anything."
-
-	robot.respond /banana/i, (msg) ->
-		msg.send "Ok, you're all gonna share a banana"
 
 	robot.respond /we share (.*)/i, (msg) ->
 		orderToShare = msg.match[1]
