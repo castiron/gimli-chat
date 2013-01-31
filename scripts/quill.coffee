@@ -29,7 +29,7 @@ module.exports = (robot) ->
 		else
 			msg.send "There's nothing in the Quill order, so..."
 	
-	robot.respond /remove (\d*) from quill/i, (msg) ->
+	robot.respond /remove (\d*) from quill( order)?/i, (msg) ->
 		key = msg.match[1] - 1
 		if key > -1 and robot.brain.data.quillOrder[key]
 			msg.send "Removing \"" + robot.brain.data.quillOrder[key] + "\" from the order"
