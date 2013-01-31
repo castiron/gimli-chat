@@ -29,13 +29,17 @@ module.exports = (robot) ->
 		else
 			msg.send "There's nothing in the Quill order, so..."
 	
-	# robot.respond /remove (\d*) from quill/i, (msg) ->
-	# 	key = msg.match[1] - 1
-	# 	if key > -1 and robot.brain.data.quillOrder[key]
-	# 		msg.send "Removing \"" + robot.brain.data.quillOrder[key] + "\" from the order"
-	# 		delete robot.brain.data.quillOrder[key]
-	# 	else
-	# 		msg.send "I don't think that's really an item in the order, so forget it."
+	robot.respond /remove (\d*) from quill/i, (msg) ->
+		key = msg.match[1] - 1
+		if key > -1 and robot.brain.data.quillOrder[key]
+			msg.send "Removing \"" + robot.brain.data.quillOrder[key] + "\" from the order"
+			delete robot.brain.data.quillOrder[key]
+			temp = []
+			for id,item of robot.brain.data.quillOrder
+				if item then temp.push item
+			robot.brain.data.quillOrder = temp
+		else
+			msg.send "I don't think that's really an item in the order, so forget it."
 
 	robot.respond /clear quill( orders?)?/i, (msg) ->
 		robot.brain.data.quillOrder = []
@@ -50,7 +54,7 @@ module.exports = (robot) ->
 		if not robot.brain.data.quillOrder then robot.brain.data.quillOrder = []
 		userWants = msg.match[3]
 		if userWants
-			robot.brain.data.quillOrder.push userWants
+			robot.brain.data.quillOrder.push userWants.substr(0, 1).toUpperCase() + userWants.substr(1)
 			msg.send "Ok, I've added " + userWants + " to the Quill order"
 		else
 			msg.send "I can't tell what you want, so forget it."
