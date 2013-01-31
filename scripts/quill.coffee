@@ -15,10 +15,7 @@
 # Author:
 #   zdavis, lthurston, gblair
 
-module.exports = (robot) ->
-	robot.respond /quill it in/, (msg) ->
-		msg.send 'Fuck that!'
-	
+module.exports = (robot) ->	
 	robot.respond  /show quill( order)?/i, (msg) ->
 		if not robot.brain.data.quillOrder then robot.brain.data.quillOrder = []
 		out = ''
@@ -45,6 +42,10 @@ module.exports = (robot) ->
 		msg.send "Ok, I've cleared the Quill order"
 
 	robot.respond  /quill( order( me)?)? (.*)/i, (msg) ->
+		# Avoid confusion in command syntax.  Though "quill it in" is an interesting phrase, there is no such command, for now.
+		if /it in/i.test(msg.match[3]) 
+			msg.send "You want me to add \"it in\" to the list? Fuck that."
+			return
 		# TODO: check for perceived URL and shorten it with a service if it's longer than n characters
 		if not robot.brain.data.quillOrder then robot.brain.data.quillOrder = []
 		userWants = msg.match[3]
