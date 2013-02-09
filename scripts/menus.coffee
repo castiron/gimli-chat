@@ -28,21 +28,23 @@ module.exports = (robot) ->
 		showAll : (msg) ->
 			out = 'There are no menus, human.'
 			if Object.keys(@menus).length
-				out = '||---/// THE MENUS \\\\\\---||'
+				out = ''
 				for key,url of @menus
-					out = out + "\n" + key + ":\t\t" + url
+					out = out + "\n" + key + ": " + url
 			msg.send out
 		removeMenu : (roughKey,msg) ->
 			for key,url of @menus
 				if key is @keyify(roughKey)
-					msg.send 'Removing ' + key
 					delete @menus[key]
 					return true
 			return false
 	}
 
 	robot.respond /remove menu (.*)/i, (msg) ->
-		if menus.removeMenu(msg.match[1],msg) then msg.send 'Ok. Removed it.' else msg.send 'Hmm.  Couldn\'t find that one'
+		if menus.removeMenu(msg.match[1],msg)
+			msg.send 'Ok. Removed "' + msg.match[1] + '" from the list of menus.' 
+		else 
+			msg.send 'Hmm.  Couldn\'t find that one...'
 
 	robot.respond /(show )?menus/i, (msg) ->
 		menus.init()
