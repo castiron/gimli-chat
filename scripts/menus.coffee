@@ -24,7 +24,14 @@ module.exports = (robot) ->
 		add : (key,url) ->
 			@menus[@keyify(key)] = url
 		getByKey : (key) -> @menus.key
+		findClosest : (str) -> @getByKey @keyify str
 		keyify : (str) -> str.toUpperCase()
+		showAllLinked : (msg) ->
+			if Object.keys(@menus).length
+				for key,url of @menus
+					msg.send "<a href=\"" + url + "\">" + key + "</a>"
+			else
+				msg.send 'There are no menus, human.'
 		showAll : (msg) ->
 			out = 'There are no menus, human.'
 			if Object.keys(@menus).length
@@ -48,7 +55,12 @@ module.exports = (robot) ->
 
 	robot.respond /(show )?menus/i, (msg) ->
 		menus.init()
-		menus.showAll(msg)
+		menus.showAllLinked(msg)
+
+	# robot.respond /menu (.*)/i, (msg) ->
+	# 	menus.init()
+	# 	url = menus.getByKey(msg.match[1])
+	# 	msg.send if url then url else 'I don\'t know what menu you mean, person.'
 
 	robot.respond  /add menu (.*): ?(https?:\/\/.*)/i, (msg) ->
 		menus.init()
