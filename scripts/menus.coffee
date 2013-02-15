@@ -29,7 +29,7 @@ module.exports = (robot) ->
 		showAllLinked : (msg) ->
 			if Object.keys(@menus).length
 				for key,url of @menus
-					msg.send key + ": " + url
+					msg.send "#{key}: #{url}"
 			else
 				msg.send 'There are no menus, human.'
 		showAll : (msg) ->
