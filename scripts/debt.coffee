@@ -31,9 +31,7 @@ module.exports = (robot) ->
 			@debts = robot.brain.data.cicDebts
 		addPayment: (positive = true) ->
 			amount = @msg.match[3]
-			me = @msg.message.user.name.toLowerCase()
-			for i,j of @msg.message.user
-				@msg.send "K: #{i}, V: #{j}"
+			me = @msg.message.user
 			you = debts.findUserByName(@msg.match[2])
 			if you
 				if positive
