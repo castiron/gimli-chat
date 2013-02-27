@@ -32,6 +32,8 @@ module.exports = (robot) ->
 		addPayment: (positive = true) ->
 			amount = @msg.match[3]
 			me = @msg.message.user.name.toLowerCase()
+			for i,j of @msg.message.user
+				@msg.send "K: #{i}, V: #{j}"
 			you = debts.findUserByName(@msg.match[2])
 			if you
 				if positive
@@ -50,6 +52,7 @@ module.exports = (robot) ->
 				out = parseInt a > parseInt b
 				out = if typeof a is 'undefined' then false else out
 			key = "#{sorted[0]}#{sorted[1]}"
+
 			if not @debts[key] then @debts[key] = [sorted[0], (if typeof sorted[1] == 'undefined' then 'nobody' else sorted[1]), 0]
 			sign = parseInt(if payor.id is sorted[0] then -1 else 1)
 			newAmount = @debts[key][2] + (@roundAmount(amount) * sign)
