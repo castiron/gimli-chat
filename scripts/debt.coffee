@@ -22,7 +22,7 @@
 # 	'1214753543' : ['12147','53543','12.50']
 # }
 # TODO: Save the debts at the end of the day somewhere other than the redis database, for backup purposes
-
+# TODO: Store a timestamp on each stored debt object.  If two transactions are tried within n seconds, throw an error for the second one
 module.exports = (robot) ->
 	debts = {
 		init: (msg) ->
@@ -43,33 +43,41 @@ module.exports = (robot) ->
 			else
 				@msg.send "Sheesh, I can't tell who you mean to pay.  Who the heck is #{@msg.match[2]}!?"
 		payAmount: (amount,payor,payee) ->
+			# TODO: Shouldn't be able to pay yourself
+			@payor = payor
+			@payee = payee
 			# if not payor.id or not payee.id
 			# 	@msg.send "I can't figure out who you're talking about, so forget it."
 			# 	return
-			sorted = [payor.id,payee.id].sort (a,b) -> 
-				out = parseInt a > parseInt b
-				out = if typeof a is 'undefined' then false else out
-			key = "#{sorted[0]}#{sorted[1]}"
-
-			if not @debts[key] then @debts[key] = [sorted[0], (if typeof sorted[1] == 'undefined' then 'nobody' else sorted[1]), 0]
-			sign = parseInt(if payor.id is sorted[0] then -1 else 1)
-			newAmount = @debts[key][2] + (@roundAmount(amount) * sign)
+			sorted = [@payor.id,@payee.id].sort (a,b) -> 
+			# sorted = [1002542,1002544].sort (a,b) -> 
+				if typeof a is 'undefined'
+					return false
+				return toString(a) > toString(b)
+				
+			@key = "#{sorted[0]}#{sorted[1]}"
+			@msg.send "SORTED: #{sorted[0]}, #{sorted[1]}, Payor.id: #{@payor.id}"
+			if not @debts[@key] then @debts[@key] = [sorted[0], (if typeof sorted[1] == 'undefined' then 'nobody' else sorted[1]), 0]
+			sign = parseInt(if @payor.id is sorted[0] then -1 else 1)
+			newAmount = @debts[@key][2] + (@roundAmount(amount) * sign)
 			if newAmount*1 is 0
-				delete @debts[key]
+				delete @debts[@key]
 				@msg.send "You two are squared away."
 			else
-				@debts[key][2] = @roundAmount(newAmount)
+				@debts[@key][2] = @roundAmount(newAmount)
 
 		roundAmount: (amount) ->
 			out = Math.round(parseFloat(amount)*100)/100
 
 		showAll: ->
 			out = ''
+			# for a,b of robot.brain.data.users
+			# 	out = out + "#{b.name}: #{b.id}\n"
 			for k,debt of @debts
 				creditor = robot.userForId(if (debt[2]*1 < 0) then debt[0] else debt[1])
 				debtor = robot.userForId(if (debt[2]*1 < 0) then debt[1] else debt[0])
 				amount = Math.abs(debt[2]*1)
-				out = out + "#{debtor.name} => #{creditor.name} : $#{amount}\n"
+				out = out + "[#{k}]: #{debtor.name} => #{creditor.name} : $#{amount}\n"
 			if not out then out = "Clean slate.  There are no debts."
 			@msg.send out
 
@@ -86,6 +94,8 @@ module.exports = (robot) ->
 		debts.init msg
 		debts.addPayment(false)
 
+	robot.respond /(i )?owe (.*) \$?([0-9\.]*)/i, (msg) ->
+
 	robot.respond  /(i paid|pay|give) (.*) \$?([0-9\.]*)/i, (msg) ->
 		debts.init msg
 		debts.addPayment()
@@ -94,6 +104,6 @@ module.exports = (robot) ->
 		debts.init msg
 		debts.showAll()
 
-	robot.respond /settle (debt with )(.*)/i, (msg) ->
-		# TODO
-		robot.respond "I don't have that skill yet.  In the mean time, just zero it out yourself."
+	# robot.respond /settle (debt with )(.*)/i, (msg) ->
+	# 	# TODO
+	# 	robot.respond "I don't have that skill yet.  In the mean time, just zero it out yourself."
