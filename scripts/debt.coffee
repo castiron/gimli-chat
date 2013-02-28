@@ -101,7 +101,7 @@ module.exports = (robot) ->
 	}
 
 	robot.respond /explain debts?/i, (msg) ->
-		msg.send "Usage examples:\ngimli pay|give lucas 12\ngimli owe|forgive alex 16"
+		msg.send "Usage examples:\ngimli pay|give|lend lucas 12\ngimli owe|forgive alex $16"
 
 	robot.respond /dev-debt-trash/i, (msg) ->
 		robot.brain.data.cicDebts = {}
@@ -114,7 +114,7 @@ module.exports = (robot) ->
 		debts.init msg
 		debts.addPayment(false)
 
-	robot.respond  /(i paid|pay|give) (.*) \$?([0-9\.]+)/i, (msg) ->
+	robot.respond  /(i paid|pay|give|lend) (.*) \$?([0-9\.]+)/i, (msg) ->
 		debts.init msg
 		debts.addPayment()
 
