@@ -100,7 +100,7 @@ module.exports = (robot) ->
 				out = userMatches[0]
 	}
 
-	robot.respond /explain debts/i, (msg) ->
+	robot.respond /explain debts?/i, (msg) ->
 		msg.send "Usage examples:\ngimli pay|give lucas 12\ngimli owe|forgive alex 16"
 
 	robot.respond /dev-debt-trash/i, (msg) ->
