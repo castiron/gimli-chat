@@ -57,7 +57,7 @@ module.exports = (robot) ->
 			# )
 				
 			@key = "#{sorted[0]}#{sorted[1]}"
-			@msg.send "SORTED: #{sorted[0]}, #{sorted[1]}, Payor.id: #{@payor.id}"
+			# @msg.send "SORTED: #{sorted[0]}, #{sorted[1]}, Payor.id: #{@payor.id}"
 			if not @debts[@key] then @debts[@key] = [sorted[0], (if typeof sorted[1] == 'undefined' then 'nobody' else sorted[1]), 0]
 			sign = parseInt(if @payor.id is sorted[0] then -1 else 1)
 			newAmount = @debts[@key][2] + (@roundAmount(amount) * sign)
@@ -78,7 +78,8 @@ module.exports = (robot) ->
 				creditor = robot.userForId(if (debt[2]*1 < 0) then debt[0] else debt[1])
 				debtor = robot.userForId(if (debt[2]*1 < 0) then debt[1] else debt[0])
 				amount = Math.abs(debt[2]*1)
-				out = out + "[#{k}]: #{debtor.name} => #{creditor.name} : $#{amount}\n"
+				# out = out + "[#{k}]: #{debtor.name} => #{creditor.name} : $#{amount}\n"
+				out = out + "#{debtor.name} => #{creditor.name} : $#{amount}\n"
 			if not out then out = "Clean slate.  There are no debts."
 			@msg.send out
 
