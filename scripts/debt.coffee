@@ -31,6 +31,9 @@ module.exports = (robot) ->
 			@debts = robot.brain.data.cicDebts
 		addPayment: (positive = true) ->
 			amount = @msg.match[3]
+			if amount > 100
+				@msg.send "That's arbitrarily too much - forget it!"
+				return
 			me = @msg.message.user
 			you = debts.findUserByName(@msg.match[2])
 			if you
@@ -41,9 +44,11 @@ module.exports = (robot) ->
 					newAmount = @payAmount(amount,you,me)
 					@msg.send "Noted. #{you.name} gave you $#{amount}."
 			else
-				@msg.send "Sheesh, I can't tell who you mean to pay.  Who the heck is #{@msg.match[2]}!?"
+				@msg.send "Sheesh, I can't make head or tail of what you want. Forget it."
 		payAmount: (amount,payor,payee) ->
 			# TODO: Shouldn't be able to pay yourself
+			# TODO: Shouldn't be able to pay Gimli
+			# TODO: Should cap payable/owable amount at some reasonable amount like $100
 			@payor = payor
 			@payee = payee
 			# if not payor.id or not payee.id
@@ -79,7 +84,7 @@ module.exports = (robot) ->
 				debtor = robot.userForId(if (debt[2]*1 < 0) then debt[1] else debt[0])
 				amount = Math.abs(debt[2]*1)
 				# out = out + "[#{k}]: #{debtor.name} => #{creditor.name} : $#{amount}\n"
-				out = out + "#{debtor.name} => #{creditor.name} : $#{amount}\n"
+				out = out + "#{debtor.name}\t=> #{creditor.name}: $#{amount}\n"
 			if not out then out = "Clean slate.  There are no debts."
 			@msg.send out
 
@@ -98,7 +103,7 @@ module.exports = (robot) ->
 
 	robot.respond /(i )?owe (.*) \$?([0-9\.]*)/i, (msg) ->
 
-	robot.respond  /(i paid|pay|give) (.*) \$?([0-9\.]*)/i, (msg) ->
+	robot.respond  /(i paid|pay|give) (.*) \$?([0-9\.]+)/i, (msg) ->
 		debts.init msg
 		debts.addPayment()
 
