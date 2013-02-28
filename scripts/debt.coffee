@@ -49,11 +49,12 @@ module.exports = (robot) ->
 			# if not payor.id or not payee.id
 			# 	@msg.send "I can't figure out who you're talking about, so forget it."
 			# 	return
-			sorted = [@payor.id,@payee.id].sort (a,b) -> 
-			# sorted = [1002542,1002544].sort (a,b) -> 
-				if typeof a is 'undefined'
-					return false
-				return toString(a) > toString(b)
+			sorted = [@payor.id,@payee.id].sort (a,b) -> b - a
+			# sorted = [1002543,1002544].sort( (a,b) -> 
+			# 	# if typeof a is 'undefined'
+			# 	# 	return false
+			# 	return b - a
+			# )
 				
 			@key = "#{sorted[0]}#{sorted[1]}"
 			@msg.send "SORTED: #{sorted[0]}, #{sorted[1]}, Payor.id: #{@payor.id}"
