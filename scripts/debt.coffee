@@ -36,6 +36,8 @@ module.exports = (robot) ->
 				return
 			me = @msg.message.user
 			you = debts.findUserByName(@msg.match[2])
+			if me.id is you.id
+				@msg.send "Yeah yeah no.  Paying yourself has no effect."
 			if you
 				if positive
 					newAmount = @payAmount(amount,me,you)
@@ -46,27 +48,23 @@ module.exports = (robot) ->
 			else
 				@msg.send "Sheesh, I can't make head or tail of what you want. Forget it."
 		payAmount: (amount,payor,payee) ->
-			# TODO: Shouldn't be able to pay yourself
 			# TODO: Shouldn't be able to pay Gimli
-			# TODO: Should cap payable/owable amount at some reasonable amount like $100
 			@payor = payor
 			@payee = payee
-			# if not payor.id or not payee.id
-			# 	@msg.send "I can't figure out who you're talking about, so forget it."
-			# 	return
+			if not payor.id or not payee.id
+				@msg.send "I can't figure out who you're talking about, so forget it."
+				return
 			sorted = [@payor.id,@payee.id].sort (a,b) -> b - a
-			# sorted = [1002543,1002544].sort( (a,b) -> 
-			# 	# if typeof a is 'undefined'
-			# 	# 	return false
-			# 	return b - a
-			# )
 				
 			@key = "#{sorted[0]}#{sorted[1]}"
-			# @msg.send "SORTED: #{sorted[0]}, #{sorted[1]}, Payor.id: #{@payor.id}"
+
 			if not @debts[@key] then @debts[@key] = [sorted[0], (if typeof sorted[1] == 'undefined' then 'nobody' else sorted[1]), 0]
+
+			# Get the "direction of this payment (positive or negative)"
 			sign = parseInt(if @payor.id is sorted[0] then -1 else 1)
-			newAmount = @debts[@key][2] + (@roundAmount(amount) * sign)
-			if newAmount*1 is 0
+
+			newAmount = (@debts[@key][2] + (@roundAmount(amount) * sign)) * 1
+			if newAmount is 0
 				delete @debts[@key]
 				@msg.send "You two are squared away."
 			else
@@ -77,13 +75,10 @@ module.exports = (robot) ->
 
 		showAll: ->
 			out = ''
-			# for a,b of robot.brain.data.users
-			# 	out = out + "#{b.name}: #{b.id}\n"
 			for k,debt of @debts
 				creditor = robot.userForId(if (debt[2]*1 < 0) then debt[0] else debt[1])
 				debtor = robot.userForId(if (debt[2]*1 < 0) then debt[1] else debt[0])
 				amount = Math.abs(debt[2]*1)
-				# out = out + "[#{k}]: #{debtor.name} => #{creditor.name} : $#{amount}\n"
 				out = out + "#{debtor.name}\t=> #{creditor.name}: $#{amount}\n"
 			if not out then out = "Clean slate.  There are no debts."
 			@msg.send out
@@ -92,6 +87,9 @@ module.exports = (robot) ->
 			userMatches = robot.usersForFuzzyName(name)
 			if userMatches.length is 1
 				out = userMatches[0]
+
+		killAllDebts: ->
+			@debts = {}
 	}
 
 	robot.respond /dev-debt-trash/i, (msg) ->
