@@ -21,7 +21,9 @@
 # debts = {
 # 	'1214753543' : ['12147','53543','12.50']
 # }
+# TODO: Show debts using initials
 # TODO: Save the debts at the end of the day somewhere other than the redis database, for backup purposes
+# TODO: Maintain a list of debts for each user, for easier listing by user?  Maybs we need a real database somehow on here.
 # TODO: Store a timestamp on each stored debt object.  If two transactions are tried within n seconds, throw an error for the second one
 module.exports = (robot) ->
 	debts = {
@@ -35,16 +37,18 @@ module.exports = (robot) ->
 				@msg.send "That's arbitrarily too much - forget it!"
 				return
 			me = @msg.message.user
-			you = debts.findUserByName(@msg.match[2])
+			you = @findUserByName(@msg.match[2])
 			if me.id is you.id
 				@msg.send "Yeah yeah no.  Paying yourself has no effect."
 			if you
 				if positive
 					newAmount = @payAmount(amount,me,you)
-					@msg.send "Noted. You paid #{you.name} $#{amount}."
+					message = "Noted. You paid #{you.name} $#{amount}."
 				else 
 					newAmount = @payAmount(amount,you,me)
-					@msg.send "Noted. #{you.name} gave you $#{amount}."
+					message = "Noted. #{you.name} gave you $#{amount}."
+				extra = if newAmount is 0 then "  You two are squared away." else ""
+				@msg.send message + extra
 			else
 				@msg.send "Sheesh, I can't make head or tail of what you want. Forget it."
 		payAmount: (amount,payor,payee) ->
@@ -66,7 +70,7 @@ module.exports = (robot) ->
 			newAmount = (@debts[@key][2] + (@roundAmount(amount) * sign)) * 1
 			if newAmount is 0
 				delete @debts[@key]
-				@msg.send "You two are squared away."
+				return 0
 			else
 				@debts[@key][2] = @roundAmount(newAmount)
 
@@ -79,18 +83,25 @@ module.exports = (robot) ->
 				creditor = robot.userForId(if (debt[2]*1 < 0) then debt[0] else debt[1])
 				debtor = robot.userForId(if (debt[2]*1 < 0) then debt[1] else debt[0])
 				amount = Math.abs(debt[2]*1)
-				out = out + "#{debtor.name}\t=> #{creditor.name}: $#{amount}\n"
+				out = out + "#{@getInitialsForUserId debtor.id} => #{@getInitialsForUserId creditor.id}: $#{amount}\n"
 			if not out then out = "Clean slate.  There are no debts."
 			@msg.send out
+
+		getInitialsForUserId: (id) ->
+			out = robot.userForId(id).name
+			names = out.split(' ')
+			if names.length is 2
+				out = "#{names[0].charAt(0)}#{names[1].charAt(0)}"
+			return out
 
 		findUserByName: (name) ->
 			userMatches = robot.usersForFuzzyName(name)
 			if userMatches.length is 1
 				out = userMatches[0]
-
-		killAllDebts: ->
-			@debts = {}
 	}
+
+	robot.respond /explain debts/i, (msg) ->
+		msg.send "Usage examples:\ngimli pay|give lucas 12\ngimli owe|forgive alex 16"
 
 	robot.respond /dev-debt-trash/i, (msg) ->
 		robot.brain.data.cicDebts = {}
@@ -99,7 +110,9 @@ module.exports = (robot) ->
 		debts.init msg
 		debts.addPayment(false)
 
-	robot.respond /(i )?owe (.*) \$?([0-9\.]*)/i, (msg) ->
+	robot.respond /(i )?forg[ia]ve (.*) \$?([0-9\.]*)/i, (msg) ->
+		debts.init msg
+		debts.addPayment(false)
 
 	robot.respond  /(i paid|pay|give) (.*) \$?([0-9\.]+)/i, (msg) ->
 		debts.init msg
