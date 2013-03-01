@@ -23,7 +23,8 @@
   	"bang": "1.0.1",
   	"shellwords": "0.0.1",
   	"redis": "0.7.2",
-  	"node-trello": "0.1.2"
+  	"node-trello": "0.1.2",
+	"xml2js": "0.2.6"
   },
 
   "engines": {
