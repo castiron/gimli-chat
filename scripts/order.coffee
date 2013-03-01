@@ -53,8 +53,13 @@ module.exports = (robot) ->
 		robot.brain.data.orderToShare = null
 		msg.send "Ok, I've cleared all orders"
 
+
+
 	robot.respond /we (lunch|eat|chaw|dine)( at)? (.*)/i, (msg) ->
 		lunchDestination =  msg.match[3]
+		if lunchDestination == "gorditos"
+			msg.send "[ERROR #108XXH820] Failure to comprehend"
+			return
 		robot.brain.data.lunchDestination = lunchDestination
 		msg.send "Ok, we lunch at " + robot.brain.data.lunchDestination
 
@@ -69,6 +74,4 @@ module.exports = (robot) ->
 				out = "Ok, " + userName + ", you want " + userWants
 				msg.send out
 
-#	robot.respond /we (.*) gorditos/i, (msg) ->
-#		msg.reply "[ERROR #108XXH820] Failure to comprehend"
-#		msg.finish
+
