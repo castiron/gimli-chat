@@ -40,6 +40,7 @@ module.exports = (robot) ->
 			you = @findUserByName(@msg.match[2])
 			if me.id is you.id
 				@msg.send "Yeah yeah no.  Paying yourself has no effect."
+				return
 			if you
 				if positive
 					newAmount = @payAmount(amount,me,you)
