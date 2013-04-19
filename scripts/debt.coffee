@@ -60,25 +60,34 @@ module.exports = (robot) ->
 				@msg.send "I can't figure out who you're talking about, so forget it."
 				return
 			sorted = [@payor.id,@payee.id].sort (a,b) -> b - a
-				
-			@key = "#{sorted[0]}#{sorted[1]}"
+			if (sorted[0]? and sorted[1]?) and (sorted[0] != sorted[1]) # Sanity check - one shouldn't owe oneself...
+				@key = "#{sorted[0]}#{sorted[1]}"
 
-			if not @debts[@key] then @debts[@key] = [sorted[0], (if typeof sorted[1] == 'undefined' then 'nobody' else sorted[1]), 0]
+				if not @debts[@key] then @debts[@key] = [sorted[0], (if typeof sorted[1] == 'undefined' then 'nobody' else sorted[1]), 0]
 
-			# Get the "direction of this payment (positive or negative)"
-			sign = parseInt(if @payor.id is sorted[0] then -1 else 1)
+				# Get the "direction of this payment (positive or negative)"
+				sign = parseInt(if @payor.id is sorted[0] then -1 else 1)
 
-			newAmount = (@debts[@key][2] + (@roundAmount(amount) * sign)) * 1
-			if newAmount is 0
-				delete @debts[@key]
-				return 0
-			else
-				@debts[@key][2] = @roundAmount(newAmount)
+				newAmount = (parseFloat(@debts[@key][2]) + (@roundAmount(amount) * sign)) * 1
+				if newAmount is 0
+					delete @debts[@key]
+					return 0
+				else
+					@debts[@key][2] = @roundAmount(newAmount)
 
 		roundAmount: (amount) ->
 			out = Math.round(parseFloat(amount)*100)/100
 
+		cleanDebts: ->
+			###
+			Need to remove any items where the user somehow 
+			owes herself or owes nothing
+			###
+			for k,debt of @debts
+				if (debt[0] is debt[1]) or (!debt[2]?) then delete @debts[k]
+
 		showAll: ->
+			@cleanDebts()
 			out = ''
 			for k,debt of @debts
 				creditor = robot.userForId(if (debt[2]*1 < 0) then debt[0] else debt[1])
@@ -107,23 +116,23 @@ module.exports = (robot) ->
 	robot.respond /dev-debt-trash/i, (msg) ->
 		robot.brain.data.cicDebts = {}
 
-	robot.respond /(i )?owe (.*) \$?([0-9\.]*)/i, (msg) ->
+	robot.respond /(i )?owe (.*) \$?([\d.]+)/i, (msg) ->
 		debts.init msg
 		debts.addPayment(false)
 
-	robot.respond /(i )?forg[ia]ve (.*) \$?([0-9\.]*)/i, (msg) ->
+	robot.respond /(i )?forg[ia]ve (.*) \$?([\d.]+)/i, (msg) ->
 		debts.init msg
 		debts.addPayment(false)
 
-	robot.respond  /(i paid|pay|give|lend) (.*) \$?([0-9\.]+)/i, (msg) ->
+	robot.respond  /(i paid|pay|give|lend) (.*) \$?([\d.]+)/i, (msg) ->
 		debts.init msg
 		debts.addPayment()
 
-	robot.respond  /(<) (.*) \$?([0-9\.]+)/i, (msg) ->
+	robot.respond  /(<) (.*) \$?([\d.]+)/i, (msg) ->
 		debts.init msg
 		debts.addPayment()
 
-	robot.respond  /(>) (.*) \$?([0-9\.]+)/i, (msg) ->
+	robot.respond  /(>) (.*) \$?([\d.]+)/i, (msg) ->
 		debts.init msg
 		debts.addPayment(false)
 
