@@ -52,6 +52,7 @@ module.exports = (robot) ->
 				@msg.send message + extra
 			else
 				@msg.send "Sheesh, I can't make head or tail of what you want. Forget it."
+			@showAll()
 		payAmount: (amount,payor,payee) ->
 			# TODO: Shouldn't be able to pay Gimli
 			@payor = payor
