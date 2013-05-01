@@ -1,14 +1,10 @@
 # Description:
 #   Keeps track of users' lunch orders
 #
-# Dependencies:
-#   None
-#
-# Configuration:
-#   None
-#
 # Commands:
-#   hubot (i paid|pay) <person> \$?<amount> - Add a payment into the pool
+#   hubot pay|give <person> <amount> - Add a debt into the debt pool
+#   hubot owe|forgive <person> <amount> - Add a debt into the debt pool
+#   hubot debts - Show all debts
 #
 # Author:
 #   gblair
