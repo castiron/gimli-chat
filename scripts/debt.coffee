@@ -23,6 +23,11 @@
 # TODO: Store a timestamp on each stored debt object.  If two transactions are tried within n seconds, throw an error for the second one
 module.exports = (robot) ->
 	debts = {
+		# No debts to/from these users are allowed
+		ignoreUsers: 
+			gimli: 1051697
+			shell: 1
+
 		init: (msg) ->
 			@msg = msg
 			if not robot.brain.data.cicDebts then robot.brain.data.cicDebts = {}
@@ -35,24 +40,41 @@ module.exports = (robot) ->
 				return
 			me = @msg.message.user
 			you = @findUserByName(@msg.match[2])
-			if me.id is you.id
-				@msg.send "Yeah yeah no.  Paying yourself has no effect."
-				return
-			if you
-				if positive
-					newAmount = @payAmount(amount,me,you)
-					message = "Noted. You paid #{you.name} $#{amount}."
-				else 
-					newAmount = @payAmount(amount,you,me)
-					message = "Noted. #{you.name} gave you $#{amount}."
-				extra = if newAmount is 0 then "  You two are squared away." else ""
-				@msg.send message + extra
+			if me? and you?
+				if @isPayable you && @isPayable me
+					if me.id is you.id
+						@msg.send "Yeah yeah no.  Paying yourself has no effect."
+						return
+					if you
+						if positive
+							newAmount = @payAmount(amount,me,you)
+							message = "Noted. You paid #{you.name} $#{amount}."
+						else 
+							newAmount = @payAmount(amount,you,me)
+							message = "Noted. #{you.name} gave you $#{amount}."
+						extra = if newAmount is 0 then "  You two are squared away." else ""
+						@msg.send message + extra
+					else
+						@msg.send "Sheesh, I can't make head or tail of what you want. Forget it."
+				else
+					@msg.send "No no no.  You can't pay or owe that entity, because it doesn't have pockets."
 			else
-				@msg.send "Sheesh, I can't make head or tail of what you want. Forget it."
+				@msg.send "No can compute. Sorry."
 			@showAll()
 
+		isPayable: (user) ->
+			out = true
+			if user?
+				if user.id?
+					for j,id of @ignoreUsers
+						out = out && id*1 != user.id*1
+				else 
+					out = false
+			else
+				out = false
+			out
+
 		payAmount: (amount,payor,payee) ->
-			# TODO: Shouldn't be able to pay Gimli
 			@payor = payor
 			@payee = payee
 			if not payor.id or not payee.id
@@ -77,13 +99,15 @@ module.exports = (robot) ->
 		roundAmount: (amount) ->
 			out = Math.round(parseFloat(amount)*100)/100
 
+		isDebtValid: (debt) -> @isPayable(robot.userForId debt[0]) && @isPayable(robot.userForId debt[1])
+
 		cleanDebts: ->
-			###
-			Need to remove any items where the user somehow 
-			owes herself or owes nothing
-			###
 			for k,debt of @debts
+				# Delete user's debts to herself
 				if (debt[0] is debt[1]) or (!debt[2]?) then delete @debts[k]
+
+				# Delete debts to/from invalid user ids (e.g. gimli or shell)
+				if not @isDebtValid debt then delete @debts[k]
 
 		headerizeForOutput: (str) ->
 			if str?
