@@ -27,6 +27,7 @@ module.exports = (robot) ->
 			@msg = msg
 			if not robot.brain.data.cicDebts then robot.brain.data.cicDebts = {}
 			@debts = robot.brain.data.cicDebts
+
 		addPayment: (positive = true) ->
 			amount = @msg.match[3]
 			if amount > 100
@@ -49,6 +50,7 @@ module.exports = (robot) ->
 			else
 				@msg.send "Sheesh, I can't make head or tail of what you want. Forget it."
 			@showAll()
+
 		payAmount: (amount,payor,payee) ->
 			# TODO: Shouldn't be able to pay Gimli
 			@payor = payor
@@ -88,14 +90,15 @@ module.exports = (robot) ->
 				temp = ''
 				for v in str
 					temp = "#{temp}-"
-				str = "||#{str.toUpperCase()}\n#{temp}\n"
+				str = "#{str.toUpperCase()}\n#{temp}\n"
 			return str
 
 		showAll: (forUser) ->
 			@cleanDebts()
 			out = ''
+			header = ''
 			if forUser?
-				out = @headerizeForOutput "Debts involving #{forUser.name}:"
+				header = @headerizeForOutput "Debts involving #{forUser.name}:"
 				
 			for k,debt of @debts
 				creditor = robot.userForId(if (debt[2]*1 < 0) then debt[0] else debt[1])
@@ -105,7 +108,7 @@ module.exports = (robot) ->
 				amount = Math.abs(debt[2]*1)
 				out = out + "#{@getInitialsForUserId debtor.id} => #{@getInitialsForUserId creditor.id}: $#{amount}\n"
 			if not out then out = "Clean slate.  There are no debts."
-			@msg.send out
+			@msg.send header + out
 
 		showMine: ->
 			@showAll(@msg.message.user)
