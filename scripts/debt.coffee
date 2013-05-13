@@ -83,16 +83,32 @@ module.exports = (robot) ->
 			for k,debt of @debts
 				if (debt[0] is debt[1]) or (!debt[2]?) then delete @debts[k]
 
-		showAll: ->
+		headerizeForOutput: (str) ->
+			if str?
+				temp = ''
+				for v in str
+					temp = "#{temp}-"
+				str = "||#{str.toUpperCase()}\n#{temp}\n"
+			return str
+
+		showAll: (forUser) ->
 			@cleanDebts()
 			out = ''
+			if forUser?
+				out = @headerizeForOutput "Debts involving #{forUser.name}:"
+				
 			for k,debt of @debts
 				creditor = robot.userForId(if (debt[2]*1 < 0) then debt[0] else debt[1])
 				debtor = robot.userForId(if (debt[2]*1 < 0) then debt[1] else debt[0])
+				if forUser? and !((forUser.id * 1 == creditor.id * 1) || (forUser.id * 1 == debtor.id * 1))
+					continue
 				amount = Math.abs(debt[2]*1)
 				out = out + "#{@getInitialsForUserId debtor.id} => #{@getInitialsForUserId creditor.id}: $#{amount}\n"
 			if not out then out = "Clean slate.  There are no debts."
 			@msg.send out
+
+		showMine: ->
+			@showAll(@msg.message.user)
 
 		getInitialsForUserId: (id) ->
 			out = robot.userForId(id).name
@@ -116,6 +132,10 @@ module.exports = (robot) ->
 	robot.respond /(i )?owe (.*) \$?([\d.]+)/i, (msg) ->
 		debts.init msg
 		debts.addPayment(false)
+
+	robot.respond /(show )?my debts?/i, (msg) ->
+		debts.init msg
+		debts.showMine()
 
 	robot.respond /(i )?forg[ia]ve (.*) \$?([\d.]+)/i, (msg) ->
 		debts.init msg
