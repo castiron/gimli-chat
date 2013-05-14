@@ -41,7 +41,7 @@ module.exports = (robot) ->
 			me = @msg.message.user
 			you = @findUserByName(@msg.match[2])
 			if me? and you?
-				if @isPayable you && @isPayable me
+				if @isPayable you
 					if me.id is you.id
 						@msg.send "Yeah yeah no.  Paying yourself has no effect."
 						return
