@@ -1,6 +1,5 @@
 [
 	"redis-brain.coffee",
-	"tweet.coffee",
 	"shipit.coffee",
 	"abstract.coffee",
 	"ambush.coffee",
