@@ -18,12 +18,14 @@
     "hubot": "2.3.2",
     "hubot-scripts": ">= 2.1.0",
     "optparse": "1.0.3",
-  	"htmlparser": "1.7.6",
-  	"soupselect": "0.2.0",
-  	"bang": "1.0.1",
-  	"shellwords": "0.0.1",
+    "htmlparser": "1.7.6",
+    "soupselect": "0.2.0",
+    "bang": "1.0.1",
+    "shellwords": "0.0.1",
     "mongodb": ">= 1.2.0",
-  	"node-trello": "0.1.2"
+    "node-trello": "0.1.2",
+    "jsdom": "0.8.3",
+    "xml2js": "0.2.8"
   },
 
   "engines": {
