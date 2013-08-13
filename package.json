@@ -23,6 +23,7 @@
   	"bang": "1.0.1",
   	"shellwords": "0.0.1",
   	"redis": "0.7.2",
+    "mongodb": ">= 1.2.0",
   	"node-trello": "0.1.2"
   },
 

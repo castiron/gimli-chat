@@ -19,7 +19,7 @@
 	"likeaboss.coffee",
 	"nettipot.coffee",
 	"news.coffee",
-	"redis-brain.coffee",
+	"mongo-brain.coffee",
 	"remind.coffee",
 	"script.coffee",
 	"sensitive.coffee",
