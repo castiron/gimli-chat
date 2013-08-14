@@ -131,7 +131,7 @@ module.exports = (robot) ->
 					continue
 				amount = Math.abs(debt[2]*1)
 				out = out + "#{@getInitialsForUserId debtor.id} => #{@getInitialsForUserId creditor.id}: $#{amount}\n"
-			if not out then out = "Clean slate.  There are no debts."
+			if not out then out = "There are no debts."
 			@msg.send header + out
 
 		showMine: ->
