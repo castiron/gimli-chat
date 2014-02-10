@@ -99,7 +99,7 @@ module.exports = (robot) ->
 		roundAmount: (amount) ->
 			out = Math.round(parseFloat(amount)*100)/100
 
-		isDebtValid: (debt) -> @isPayable(robot.userForId debt[0]) && @isPayable(robot.userForId debt[1])
+		isDebtValid: (debt) -> @isPayable(robot.brain.userForId debt[0]) && @isPayable(robot.brain.userForId debt[1])
 
 		cleanDebts: ->
 			for k,debt of @debts
@@ -125,8 +125,8 @@ module.exports = (robot) ->
 				header = @headerizeForOutput "Debts involving #{forUser.name}:"
 				
 			for k,debt of @debts
-				creditor = robot.userForId(if (debt[2]*1 < 0) then debt[0] else debt[1])
-				debtor = robot.userForId(if (debt[2]*1 < 0) then debt[1] else debt[0])
+				creditor = robot.brain.userForId(if (debt[2]*1 < 0) then debt[0] else debt[1])
+				debtor = robot.brain.userForId(if (debt[2]*1 < 0) then debt[1] else debt[0])
 				if forUser? and !((forUser.id * 1 == creditor.id * 1) || (forUser.id * 1 == debtor.id * 1))
 					continue
 				amount = Math.abs(debt[2]*1)
@@ -138,14 +138,14 @@ module.exports = (robot) ->
 			@showAll(@msg.message.user)
 
 		getInitialsForUserId: (id) ->
-			out = robot.userForId(id).name
+			out = robot.brain.userForId(id).name
 			names = out.split(' ')
 			if names.length is 2
 				out = "#{names[0].charAt(0)}#{names[1].charAt(0)}"
 			return out
 
 		findUserByName: (name) ->
-			userMatches = robot.usersForFuzzyName(name)
+			userMatches = robot.brain.usersForFuzzyName(name)
 			if userMatches.length is 1
 				out = userMatches[0]
 	}
