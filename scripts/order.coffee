@@ -29,7 +29,7 @@ module.exports = (robot) ->
 			out = ''
 
 		hasOrder = false
-		for id, user of robot.users()
+		for id, user of robot.brain.users()
 			if user.currentOrder
 				hasOrder = true
 				out = out + user.name.toUpperCase() + ': ' + user.currentOrder + "\n"
@@ -49,7 +49,7 @@ module.exports = (robot) ->
 		msg.send "Ok, you're all gonna share " + orderToShare
 
 	robot.respond /clear orders/i, (msg) ->
-		for id, user of robot.users()
+		for id, user of robot.brain.users()
 			user.currentOrder = null
 		robot.brain.data.orderToShare = null
 		msg.send "Ok, I've cleared all orders"
