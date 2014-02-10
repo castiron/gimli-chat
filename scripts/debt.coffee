@@ -151,7 +151,7 @@ module.exports = (robot) ->
 	}
 
 	robot.respond /explain debts?/i, (msg) ->
-		msg.send "Usage examples:\ngimli pay|give|lend|< lucas 12\ngimli owe|forgive|> alex $16"
+		msg.send "Usage examples:\ngimli pay|give|lend|< lucas 12\ngimli owe|forgive|> toshiro $16"
 
 	robot.respond /dev-debt-trash/i, (msg) ->
 		robot.brain.data.cicDebts = {}
