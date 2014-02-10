@@ -20,6 +20,7 @@
 module.exports = (robot) ->
 
 	robot.respond  /call it in/i, (msg) ->
+		console.log robot.brain.data
 		if robot.brain.data.lunchDestination?
 			lunchNotify =  "WE LUNCH AT " + robot.brain.data.lunchDestination.toUpperCase()
 			sep = Array(lunchNotify.length + 1).join '-'
