@@ -24,7 +24,7 @@ module.exports = (robot) ->
 		if robot.brain.data.lunchDestination?
 			lunchNotify =  "WE LUNCH AT " + robot.brain.data.lunchDestination.toUpperCase()
 			sep = Array(lunchNotify.length + 1).join '-'
-			out = "\n" + sep + "\n" + lunchNotify + "\n" + sep + "\n\n"
+			out = "\n#{sep}\n#{lunchNotify}\n#{sep}\n\n"
 		else
 			out = ''
 
@@ -68,7 +68,7 @@ module.exports = (robot) ->
 		userName = msg.message.user.name.toLowerCase()
 		userWants = msg.match[3]
 		if userWants
-			users = robot.usersForFuzzyName(userName)
+			users = robot.brain.usersForFuzzyName(userName)
 			if users.length is 1
 				user = users[0]
 				user.currentOrder = userWants
