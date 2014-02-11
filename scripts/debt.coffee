@@ -80,7 +80,7 @@ module.exports = (robot) ->
 			if not payor.id or not payee.id
 				@msg.send "I can't figure out who you're talking about, so forget it."
 				return
-			sorted = [@payor.id,@payee.id].sort (a,b) -> b - a
+			sorted = [@payor.id,@payee.id].sort()
 			if (sorted[0]? and sorted[1]?) and (sorted[0] != sorted[1]) # Sanity check - one shouldn't owe oneself...
 				@key = "#{sorted[0]}#{sorted[1]}"
 
