@@ -67,7 +67,7 @@ module.exports = (robot) ->
 			if user?
 				if user.id?
 					for j,id of @ignoreUsers
-						out = out && id*1 != user.id*1
+						out = out && id != user.id
 				else 
 					out = false
 			else
@@ -127,7 +127,7 @@ module.exports = (robot) ->
 			for k,debt of @debts
 				creditor = robot.brain.userForId(if (debt[2]*1 < 0) then debt[0] else debt[1])
 				debtor = robot.brain.userForId(if (debt[2]*1 < 0) then debt[1] else debt[0])
-				if forUser? and !((forUser.id * 1 == creditor.id * 1) || (forUser.id * 1 == debtor.id * 1))
+				if forUser? and !((forUser.id == creditor.id) || (forUser.id == debtor.id))
 					continue
 				amount = Math.abs(debt[2]*1)
 				out = out + "#{@getInitialsForUserId debtor.id} => #{@getInitialsForUserId creditor.id}: $#{amount}\n"
