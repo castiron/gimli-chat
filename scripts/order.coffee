@@ -54,8 +54,6 @@ module.exports = (robot) ->
 		robot.brain.data.orderToShare = null
 		msg.send "Ok, I've cleared all orders"
 
-
-
 	robot.respond /we (lunch|eat|chaw|dine)( at)? (.*)/i, (msg) ->
 		lunchDestination =  msg.match[3]
 		if lunchDestination == "gorditos"
