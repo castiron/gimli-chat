@@ -102,7 +102,7 @@ module.exports = (robot) ->
 			"The look in your eyes, I recognize it. You used to have it for me."
 			"You bet I'm agitated! I may be surrounded by insanity, but I am not insane."
 			"Computer, lights up!"
-			"Mr O'Brien says the weapon was in a state of discharge."
+			"Mr. O'Brien says the weapon was in a state of discharge."
 			"How long can two people talk about nothing?"
 			"I think you've let your personal feelings cloud your judgement."
 			"Well, I'll say this for him - he's sure of himself."
