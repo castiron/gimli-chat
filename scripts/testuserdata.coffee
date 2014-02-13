@@ -17,4 +17,5 @@ module.exports = (robot) ->
 		else
 			msg.send "TEST PASSED!!! Your user data is getting persisted, see?:"
 		for id, user of robot.brain.users()
-			msg.send "FOUND: #{user.name.toUpperCase()}"
+			out = ''
+			msg.send "#{out}\nFOUND: #{user.name.toUpperCase()}"
