@@ -16,7 +16,7 @@ module.exports = (robot) ->
     fetchEmoji()
       .then (emoji) ->
         fortune = ''
-        rand = -> Math.ceil Math.random() * emoji.length
+        rand = -> Math.ceil Math.random() * emoji.length - 1
         fortune += ':' + emoji[rand()] + ': ' for [1..3]
         msg.send fortune
       .fail ->
