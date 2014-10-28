@@ -106,9 +106,21 @@ module.exports = (robot) ->
       verbiage.push "#{rank + 1}. #{item.name} - #{item.karma}"
     msg.send verbiage.join("\n")
 
+  robot.respond /karma best ([0-9]+)$/i, (msg) ->
+    verbiage = ["Showing best #{msg.match[0]} karmae"]
+    for item, rank in karma.top(msg.match[0])
+      verbiage.push "#{rank + 1}. #{item.name} - #{item.karma}"
+    msg.send verbiage.join("\n")
+
   robot.respond /karma worst$/i, (msg) ->
     verbiage = ["The Worst"]
     for item, rank in karma.bottom()
+      verbiage.push "#{rank + 1}. #{item.name} - #{item.karma}"
+    msg.send verbiage.join("\n")
+
+  robot.respond /karma worst ([0-9]+)$/i, (msg) ->
+    verbiage = ["Showing worst #{msg.match[0]} karmae"]
+    for item, rank in karma.bottom(msg.match[0])
       verbiage.push "#{rank + 1}. #{item.name} - #{item.karma}"
     msg.send verbiage.join("\n")
 
