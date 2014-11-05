@@ -19,6 +19,6 @@ class Crumbler
 
 module.exports = (robot) ->
   crumbler = new Crumbler;
-  robot.respond /crumble(s ?)? (me ?)?([a-zA-Z123456789\s]+):?(.*)?/i, (msg) ->
-    if msg.match[4] then dictionary = msg.match[4] else dictionary = 'standard'
+  robot.respond /crumble(s ?)? (me ?)?([a-zA-Z123456789\s]+)(:[a-zA-Z_]+)?/i, (msg) ->
+    if msg.match[4] then dictionary = msg.match[4].replace(':', '') else dictionary = 'standard'
     msg.send 'https://www.crumbles.co/?crumble=' + crumbler.querify(msg.match[3]) + '&dictionary=' + dictionary
