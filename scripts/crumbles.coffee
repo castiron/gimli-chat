@@ -5,7 +5,8 @@
 #   crumbles (me) [text] outputs a link to the crumblized video
 #   crumbles (me) [text]:[dictionary] outputs a link to the crumblized video with the dictonary specified
 #
-#   NB: Since Crumble is new, there isn't a list of dictionaries, any sanitization on the :[dictionary] command.
+#   NB: Since Crumble is new (and the dictionary list is probably growing), 
+#   there isn't a list of dictionaries or any sanitization on the :[dictionary] command.
 #   dictionary parameters can be found by playing around on http://www.crumbles.co.
 #   In the future, a more structured command may be added
 #
