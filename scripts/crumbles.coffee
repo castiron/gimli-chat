@@ -14,12 +14,11 @@
 class Crumbler
   querify: (input) ->
     # Use to remove punctuation if query contains any
-    # query = input.replace(/[^a-zA-Z\d\s]/g, '');
-    query = input;
+    query = input.replace(/[^a-zA-Z\d\s]/g, '');
     return encodeURIComponent(query)
 
 module.exports = (robot) ->
   crumbler = new Crumbler;
-  robot.respond /crumble(s ?)? (me ?)?([a-zA-Z123456789\s]+)(:[a-zA-Z_]+)?/i, (msg) ->
+  robot.respond /crumble(s ?)? (me ?)?([^:]+)(:[a-zA-Z_]+)?/i, (msg) ->
     if msg.match[4] then dictionary = msg.match[4].replace(':', '') else dictionary = 'standard'
     msg.send 'https://www.crumbles.co/?crumble=' + crumbler.querify(msg.match[3]) + '&dictionary=' + dictionary
