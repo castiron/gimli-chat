@@ -2,3 +2,5 @@
 node_modules
 .env
 /db
+.hubot_history
+test-data.json
