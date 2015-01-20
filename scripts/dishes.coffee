@@ -34,4 +34,4 @@ module.exports = (r) -> r.brain.on 'loaded', ->
       robot: r
       queueUpdateFrequency: process.env.HUBOT_DISHES_UPDATE_CRON_FREQUENCY
       messager: messager
-      activeDays: ['0', '1', '2', '3', '4', '5', '6']
+      activeDays: ['1', '3', '4', '5', '6']
