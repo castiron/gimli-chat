@@ -15,6 +15,7 @@ module.exports = class DishesQueueUserInterface
     @initUserRemove()
     @initList()
     @initReminders()
+    @initDebugReminder()
   
   initUserAdd: ->
     @r.respond /dish(es)?( queue)? (add|activate) ([^\s]+)/i, (msg) =>
@@ -43,12 +44,21 @@ module.exports = class DishesQueueUserInterface
       res =  "```The dishes queue:\n#{list}```"
     msg.send res
 
+  initDebugReminder: ->
+    @r.respond /dish(es)? debugReminder/i, (msg) => @sayReminderMsg()
+
   initReminders: -> new Cronner
     cronTime: @reminderFrequency
-    tick: => @messager.say @reminderMsg() if @queue.todayIsADishesDay()
+    tick: => @sayReminderMsg()
+
+  sayReminderMsg: -> @messager.say @reminderMsg() if @queue.todayIsADishesDay()
 
   dishDoer: -> capitalizeFirst @queue.getCurrent()
 
-  reminderMsg: -> "@channel: Oi! You have #{@dishDoer()} to thank for doing the dishes today!"
+  reminderMsg: -> 
+    # NOTE / TODO: "<!channel>" doesn't work with our version of hubot-slack,
+    #  due to escaping. Maybs it's been fixed in a newer version?
+    # "<!channel>: Oi! You have #{@dishDoer()} to thank for doing the dishes today!"
+    "```=-_-= =-_-= =-_-= =-_-= =-_-=\nOi! You have #{@dishDoer()} to thank for doing the dishes today!\n=-_-= =-_-= =-_-= =-_-= =-_-=```"
 
   userNotFound: (msg) -> msg.send "Sorry wat. No can do!!!!"
