@@ -43,7 +43,7 @@ module.exports = class DishesQueueUserInterface
     if @queue.todayIsAnOffDay() then l.unshift @offDayMsg()
     if @queue.todayIsACleanersDay() then l.unshift @cleanersName()
     if l.length > 0
-      l[0] = "#{capitalizeFirst l[0]} (today)"
+      l[0] = "#{l[0]} (today)"
       list = l.join "\n"
       res =  "```The dishes queue:\n#{list}```"
     msg.send res

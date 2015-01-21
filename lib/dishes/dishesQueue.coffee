@@ -42,6 +42,7 @@ module.exports = class DishesQueue
     q = @queue()
     @i = @getNextQueueIndex()
     if q[@i]?
+      console.log 'MOVING QUEUE'
       q = @resetQueue()
       q[@i].dishes ||= {}
       q[@i].dishes.today = true
