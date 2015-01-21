@@ -16,4 +16,6 @@ module.exports = class DishesLaborer
     else
       false
 
+  fullHandle: -> @user.name
+
   getUserByName: (name) -> @r.brain.usersForFuzzyName(name)[0]

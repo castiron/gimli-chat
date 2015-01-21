@@ -9,7 +9,8 @@ module.exports = class DishesQueue
   constructor: (args) ->
     @r = args.robot
     @queueUpdateFrequency = args.queueUpdateFrequency
-    @activeDays = args.activeDays || ['2', '3', '4', '5', '6']
+    @activeDays = args.activeDays || ['1', '2', '3', '4', '5']
+    @cleanersDays = args.cleanersDays || []
     @messager = args.messager
     @i = @getInitialQueueIndex()
     @initQueueCycle()
@@ -25,7 +26,13 @@ module.exports = class DishesQueue
     cronTime: @queueUpdateFrequency
     tick: => @moveQueue()
 
-  todayIsADishesDay: -> (_.indexOf @activeDays, "#{(new Date()).getDay()}") != -1
+  day: -> (new Date()).getDay()
+
+  allPossibleDays: -> @possibleDays
+
+  todayIsADishesDay: -> _.contains @activeDays, "#{@day()}"
+  todayIsACleanersDay: -> _.contains @cleanersDays, "#{@day()}"
+  todayIsAnOffDay: -> !@todayIsADishesDay()
   
   hasAssignee: (queue) -> (
       _.filter queue, (i) -> i.dishes.today
@@ -68,9 +75,7 @@ module.exports = class DishesQueue
   
   arrayChunkToFront: (arr, i) -> _.rest(arr, @i).concat _.first(arr, @i)
 
-  getCurrent: -> 
+  getCurrentName: -> 
     item = (_.filter @queue(), (v) -> v.dishes? and v.dishes.today)[0]
-    if @todayIsADishesDay()
-      if item? then capitalizeFirst item.name else 'er...nobody'
-    else
-      'the Cleaners'
+    if item? then item.name else undefined
+

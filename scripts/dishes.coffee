@@ -24,7 +24,9 @@ RoomMessager = require '../lib/util/roomMessager.coffee'
 
 # SET UP YE DISHES
 module.exports = (r) -> r.brain.on 'loaded', ->
-  messager = new RoomMessager { robot: r, roomId: process.env.HUBOT_DISHES_ROOM }
+  messager = new RoomMessager
+    robot: r
+    roomId: if process.env.HUBOT_DISHES_DEV > 0 then process.env.HUBOT_DISHES_ROOM_DEV else process.env.HUBOT_DISHES_ROOM
   new DishesQueueUserInterface 
     robot: r
     messager: messager
@@ -34,4 +36,5 @@ module.exports = (r) -> r.brain.on 'loaded', ->
       robot: r
       queueUpdateFrequency: process.env.HUBOT_DISHES_UPDATE_CRON_FREQUENCY
       messager: messager
-      activeDays: ['1', '3', '4', '5', '6']
+      activeDays: ['1', '2', '3', '4', '5']
+      cleanersDays: ['2']
