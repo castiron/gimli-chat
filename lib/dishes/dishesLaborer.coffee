@@ -7,11 +7,18 @@ module.exports = class DishesLaborer
     @user = @getUserByName args.name
     if @user? then @user.dishes ||= {}
 
-  putIntoDuty: -> @user? and (@user.dishes.activeDuty = true)
+  putIntoDuty: -> 
+    if @user?
+      @user.dishes.activeDuty = true
+      @user.dishes.today = false
+      true
+    else
+      false
 
   removeFromDuty: ->
     if out = @user?
       @user.dishes.activeDuty = false
+      @user.dishes.today = false
       true
     else
       false
