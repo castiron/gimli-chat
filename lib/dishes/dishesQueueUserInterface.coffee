@@ -1,5 +1,7 @@
 capitalizeFirst = require '../util/capitalizeFirst.coffee'
 Cronner = require '../util/cronner.coffee'
+F = require '../util/messageFormatter.coffee'
+
 
 #############
 # UI to the dish queue
@@ -70,7 +72,8 @@ module.exports = class DishesQueueUserInterface
     # NOTE / TODO: "<!channel>" doesn't work with our version of hubot-slack,
     #  due to escaping. Maybs it's been fixed in a newer version?
     # "<!channel>: Oi! You have #{@dishDoer()} to thank for doing the dishes today!"
-    "```=-_-= =-_-= =-_-= =-_-= =-_-=\nOi! You have #{capitalizeFirst @dishDoer()} to thank for doing the dishes today!\n=-_-= =-_-= =-_-= =-_-= =-_-=```"
+    F.codeBlock F.patternCouch "Oi! You have #{capitalizeFirst @dishDoer()} to thank for doing the dishes today!", '=-_-='
+    # "```=-_-= =-_-= =-_-= =-_-= =-_-=\nOi! You have #{capitalizeFirst @dishDoer()} to thank for doing the dishes today!\n=-_-= =-_-= =-_-= =-_-= =-_-=```"
 
   noOneMsg: -> 'No one is scheduled to do the dishes...:scream:'
 
