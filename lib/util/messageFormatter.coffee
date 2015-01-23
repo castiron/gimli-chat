@@ -4,7 +4,6 @@ module.exports = class MessageFormatter
     out = str
     n = Math.ceil(str.length / pattern.length) + 1
     extra = str.length % pattern.length
-    console.log str.length, pattern.length, n, extra
     if n > 0 and pattern.length > 0
       chain = []
       while n -= 1
