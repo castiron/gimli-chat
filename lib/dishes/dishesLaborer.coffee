@@ -9,19 +9,22 @@ module.exports = class DishesLaborer
 
   putIntoDuty: -> 
     if @user?
+      @resetUser()
       @user.dishes.activeDuty = true
-      @user.dishes.today = false
       true
     else
       false
 
   removeFromDuty: ->
     if @user?
-      @user.dishes.activeDuty = false
-      @user.dishes.today = false
+      @resetUser()
       true
     else
       false
+
+  resetUser: ->
+    @user.dishes.activeDuty = false
+    @user.dishes.today = false
 
   fullHandle: -> @user.name
 
