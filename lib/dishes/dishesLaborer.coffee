@@ -16,7 +16,7 @@ module.exports = class DishesLaborer
       false
 
   removeFromDuty: ->
-    if out = @user?
+    if @user?
       @user.dishes.activeDuty = false
       @user.dishes.today = false
       true
