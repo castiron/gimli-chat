@@ -18,6 +18,7 @@ module.exports = class DishesQueueUserInterface
     @initList()
     @initReminders()
     @initDebugReminder()
+    @initSkip()
   
   initUserAdd: ->
     @r.respond /dish(es)?( queue)? (add|activate) ([^\s]+)/i, (msg) =>
@@ -51,11 +52,18 @@ module.exports = class DishesQueueUserInterface
     msg.send res
 
   initDebugReminder: ->
-    @r.respond /dish(es)? debugReminder/i, (msg) => @messager.say @reminderMsg() 
+    @r.respond /dish(es)? debugReminder/i, (msg) => @sayReminder() 
 
   initReminders: -> new Cronner
     cronTime: @reminderFrequency
     tick: => @sayReminderMsg()
+
+  sayReminder: -> @messager.say @reminderMsg()
+
+  initSkip: -> @r.respond /dish(es)? skip/i, (msg) =>
+    @queue.forceMoveQueue()
+    msg.send "Mmmkay if you say so. The dishes queue has been incremented!"
+    @showList msg
 
   sayReminderMsg: -> @messager.say @reminderMsg() if @queue.todayIsADishesDay()
 
@@ -72,7 +80,7 @@ module.exports = class DishesQueueUserInterface
     # NOTE / TODO: "<!channel>" doesn't work with our version of hubot-slack,
     #  due to escaping. Maybs it's been fixed in a newer version?
     # "<!channel>: Oi! You have #{@dishDoer()} to thank for doing the dishes today!"
-    F.codeBlock F.patternCouch "Oi! You have #{capitalizeFirst @dishDoer()} to thank for doing the dishes today!", '=-_-='
+    F.codeBlock F.patternCouch "Oi! You have #{capitalizeFirst @dishDoer()} to thank for doing the dishes today!", '=-_-=-¯-'
     # "```=-_-= =-_-= =-_-= =-_-= =-_-=\nOi! You have #{capitalizeFirst @dishDoer()} to thank for doing the dishes today!\n=-_-= =-_-= =-_-= =-_-= =-_-=```"
 
   noOneMsg: -> 'No one is scheduled to do the dishes...:scream:'

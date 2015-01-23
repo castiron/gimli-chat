@@ -37,16 +37,21 @@ module.exports = class DishesQueue
   hasAssignee: (queue) -> (
       _.filter queue, (i) -> i.dishes.today
     ).length > 0
-  
-  moveQueue: -> if @todayIsADishesDay()
+
+  incrementQueue: ->
     q = @queue()
     @i = @getNextQueueIndex()
     if q[@i]?
-      console.log 'MOVING QUEUE'
       q = @resetQueue()
       q[@i].dishes ||= {}
       q[@i].dishes.today = true
+
+  moveQueue: -> if @todayIsADishesDay()
+    console.log 'Auto-incrementing DISHES QUEUE'
+    @incrementQueue()
   
+  forceMoveQueue: -> @incrementQueue()
+
   resetQueue: -> _.map @queue(), (v) ->
     v.dishes.today = false
     v
