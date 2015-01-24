@@ -1,11 +1,10 @@
+AbstractUser = require '../abstractUser.coffee'
+
 #############
 # Adds/removes users from dish duty
 #############
-module.exports = class DishesLaborer
-  constructor: (args) ->
-    @r = args.robot
-    @user = @getUserByName args.name
-    if @user? then @user.dishes ||= {}
+module.exports = class DishesLaborer extends AbstractUser
+  initialize: -> if @user? then @user.dishes ||= {}
 
   putIntoDuty: -> 
     if @user?
@@ -25,7 +24,3 @@ module.exports = class DishesLaborer
   resetUser: ->
     @user.dishes.activeDuty = false
     @user.dishes.today = false
-
-  fullHandle: -> @user.name
-
-  getUserByName: (name) -> @r.brain.usersForFuzzyName(name)[0]
