@@ -9,11 +9,14 @@ module.exports = class DishesQueue
   constructor: (args) ->
     @r = args.robot
     @queueUpdateFrequency = args.queueUpdateFrequency
-    @activeDays = args.activeDays || ['1', '2', '3', '4', '5']
-    @cleanersDays = args.cleanersDays || []
-    @messager = args.messager
     @i = @getInitialQueueIndex()
     @initQueueCycle()
+    @initialize args
+
+  initialize: (args) ->
+    @activeDays = args.activeDays || ['1', '2', '3', '4', '5']
+    @cleanersDays = args.cleanersDays || []
+
 
   queue: -> _.filter @r.brain.data.users, (v, k) -> v.dishes? and v.dishes.activeDuty
 
