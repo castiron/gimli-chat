@@ -3,10 +3,12 @@ TransitInterface = require '../lib/transit/transitInterface.coffee'
 
 # INTERFACE
 module.exports = (r) ->
+  defaultLocationIds = if process.env.HUBOT_TRIMET_DEFAULT_LOCATION_IDS?
+    process.env.HUBOT_TRIMET_DEFAULT_LOCATION_IDS.split ',' 
+  else
+    ['13689', '13613', '13597']
   new TransitInterface
     robot: r
-    # formatter: new BusDataFormatter
     dataService: new TrimetBusDataService
-      appId: '838728B06B7791BD7ABA6D657'
-      defaultLocationIds: ['13689', '13613', '13597']
-  
+      appId: process.env.HUBOT_TRIMET_APP_ID
+      defaultLocationIds: defaultLocationIds

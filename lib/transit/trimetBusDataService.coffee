@@ -3,6 +3,7 @@ _ = require 'underscore'
 EventEmitter = require('events').EventEmitter
 
 # DATA FETCHER
+# TODO: Break this out into separate objects for each type of data
 module.exports = class TrimetBusDataService extends EventEmitter
   constructor: (args) ->
     @appId = args.appId
@@ -10,7 +11,7 @@ module.exports = class TrimetBusDataService extends EventEmitter
     @getData()
 
   path: -> '/ws/v2/arrivals'
-  queryParams: -> "appID=#{@appId}&json=true&locIDs=#{@locIds}&showPosition=true"
+  queryParams: -> "appID=#{@appId}&json=true&streetcar=false&locIDs=#{@locIds}&showPosition=true"
   uri: -> "#{@path()}?#{@queryParams()}"
   host: -> 'developer.trimet.org'
   refresh: -> @getData()
@@ -32,15 +33,19 @@ module.exports = class TrimetBusDataService extends EventEmitter
 
   injectLocationData: (arrivals) ->
     _.map arrivals, (a) =>
-      a.locationDesc = @getLocationDescFor a.locid
+      loc = @getLocationById a.locid
+      a.locationDesc = loc.desc
+      a.direction = loc.dir
       a
 
-  getLocationDescFor: (locid) -> (_.where @locations, {id: locid})[0].desc
-
+  getLocationById: (id) -> (_.where @locations, {id: id})[0]
 
   # No streetcar
-  busArrivals: -> _.reject @arrivals, (o) -> o.streetCar? and o.streetCar
-  streetcarArrivals: -> _.filter @arrivals, (o) -> o.streetCar? and o.streetCar
+  # TODO: This stopped worxin for some reason
+  busArrivals: -> 
+    _.reject @arrivals, (o) -> o.streetCar? and o.streetCar
+  streetcarArrivals: -> 
+    _.filter @arrivals, (o) -> o.streetCar? and o.streetCar
 
   getArrivals: -> @arrivals
   getLocations: -> @locations
