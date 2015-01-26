@@ -25,7 +25,8 @@ module.exports = class TrimetBusDataService extends EventEmitter
   handleResponse: (res) -> 
     str = ''
     res.on 'data', (chunk) -> str += chunk
-    res.on 'end', => 
+    res.on 'end', =>
+      console.log 'got trimet data:', str
       data = (JSON.parse str).resultSet
       @locations = data.location
       @arrivals = @injectLocationData data.arrival
@@ -41,7 +42,8 @@ module.exports = class TrimetBusDataService extends EventEmitter
   getLocationById: (id) -> (_.where @locations, {id: id})[0]
 
   # No streetcar
-  # TODO: This stopped worxin for some reason
+  # TODO: This stopped worxin for some reason when the 
+  #  returned data stopped having 'streetcar' bits in them
   busArrivals: -> 
     _.reject @arrivals, (o) -> o.streetCar? and o.streetCar
   streetcarArrivals: -> 
