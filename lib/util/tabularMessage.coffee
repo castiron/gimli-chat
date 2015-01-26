@@ -4,9 +4,10 @@ F = require './messageFormatter.coffee'
 module.exports = class TabularMessage
 
   constructor: (data, args) ->
-    @args = args
+    @args = args || {}
     @data = data
-    @transform = args.transform
+    @header = @args.header
+    @transform = @args.transform
     @initCols()
     @initColWidths()
 
@@ -22,30 +23,48 @@ module.exports = class TabularMessage
     if v? then @colWidths[c] = Math.max v, @colWidths[c]
 
   formatted: ->
-    rows = []
     d = @_transform @data
     _.each d, (r) => @trackColWidths r
-    console.log @colWidths
+    rows = @headerRow()
     _.each d, (r) => rows.push @formatRow r
     F.codeBlock rows.join "\n"
+
+  headerRow: ->
+    if @header
+      h = @formatHeaderRow()
+      div = @beefRight '', h.length, '-' 
+      [h, div]
+    else
+      []
+
+  formatHeaderRow: ->
+    buf = []
+    _.each @cols, (col) =>
+      buf.push @normalizeWidthForCol col, col
+    buf.join ' | '
 
   formatRow: (r) ->
     buf = []
     _.each @cols, (col) =>
-      v = if r[col]? then @normalizeWidthForCol(col, "#{r[col]}") else '--'
+      v = if r[col]? then @normalizeWidthForCol(col, r[col]) else '--'
       buf.push v
     buf.join ' | '
 
   normalizeWidthForCol: (col, v) ->
+    v = "#{v}"
     w = @colWidths[col]
-    while v.length < w
-      v += ' '
-    v
+    @beefRight v, w
+
+  beefRight: (str, l, char = ' ') ->
+    while str.length < l
+      str += char 
+    str
 
   trackColWidths: (r) ->
     _.each @cols, (col) =>
       if r[col]? then @updateColWidth col, "#{r[col]}".length
 
+  # TODO: get this out of here - violates single purpose
   _transform: (obj) -> _.map obj, (o) => if _.isFunction @transform then @transform o else o
 
   _keys: ->
