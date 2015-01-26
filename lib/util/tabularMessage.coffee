@@ -1,5 +1,4 @@
 _ = require 'underscore'
-F = require './messageFormatter.coffee'
 
 module.exports = class TabularMessage
 
@@ -27,7 +26,7 @@ module.exports = class TabularMessage
     _.each d, (r) => @trackColWidths r
     rows = @headerRow()
     _.each d, (r) => rows.push @formatRow r
-    F.codeBlock rows.join "\n"
+    rows.join "\n"
 
   headerRow: ->
     if @header
