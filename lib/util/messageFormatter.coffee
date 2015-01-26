@@ -12,4 +12,4 @@ module.exports = class MessageFormatter
       out = "#{c}\n#{str}\n#{c}"
     out
 
-  @codeBlock: (str) -> "```#{str}```"
+  @codeBlock: (str) -> "```\n#{str}\n```"

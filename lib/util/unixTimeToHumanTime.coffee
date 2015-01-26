@@ -1,0 +1,1 @@
+module.exports = (unixtime) -> (new Date(unixtime)).toTimeString()
