@@ -26,7 +26,6 @@ module.exports = class TrimetBusDataService extends EventEmitter
     str = ''
     res.on 'data', (chunk) -> str += chunk
     res.on 'end', =>
-      console.log 'got trimet data:', str
       data = (JSON.parse str).resultSet
       @locations = data.location
       @arrivals = @injectLocationData data.arrival
