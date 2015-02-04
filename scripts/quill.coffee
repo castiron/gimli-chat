@@ -45,9 +45,9 @@ module.exports = (robot) ->
 		robot.brain.data.quillOrder = []
 		msg.send "Ok, I've cleared the Quill order"
 
-	robot.respond  /quill( order( me)?)? (.*)/i, (msg) ->
+	robot.respond  /quill order( me)? (.*)/i, (msg) ->
 		# Avoid confusion in command syntax.  Though "quill it in" is an interesting phrase, there is no such command, for now.
-		if /it in/i.test(msg.match[3]) 
+		if /it in/i.test(msg.match[2]) 
 			msg.send "You want me to add \"it in\" to the list? Fuck that."
 			return
 		# TODO: check for perceived URL and shorten it with a service if it's longer than n characters
