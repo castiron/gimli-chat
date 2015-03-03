@@ -1,5 +1,5 @@
 # Description:
-#   Keeps track of users' lunch orders
+#   Remembers what you're working on so nobody has to
 #
 # Dependencies:
 #   None
