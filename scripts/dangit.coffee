@@ -14,6 +14,6 @@ class DangitUtil
 
 module.exports = (robot) ->
 	# Can't seem to get whitespace to 
-	robot.hear ///(dangit|dammit|sheesh|come on|wow|wtf|wft|omg),?\x20#{robot.name}///i, (msg) -> (new DangitUtil(msg)).sorry()
+	robot.hear ///(dangit|dammit|sheesh|come on|wow|wtf|wft|omg|crap),?\x20#{robot.name}///i, (msg) -> (new DangitUtil(msg)).sorry()
 	robot.hear ///(perf|awesome|exactly|right|nice|wow),?\x20#{robot.name}[!.]?///i, (msg) -> (new DangitUtil(msg)).thanks()
 	robot.hear ///(thanks|grazie|gracias|danke|ta),?\x20#{robot.name}[!.]?///i, (msg) -> (new DangitUtil(msg)).np()
