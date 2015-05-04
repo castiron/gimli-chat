@@ -46,7 +46,7 @@ lookupWeather = (msg, coords, err, location) ->
       return msg.send "Could not parse weather data."
     humidity = (current.humidity * 100).toFixed 0
     temperature = getTemp(current.temperature)
-    text = "Current Weather for " + location + ":\nIt is currently #{temperature} #{current.summary}, #{humidity}% humidity"
+    text = "Current Weather for " + location + ":\n#{temperature} #{current.summary}, #{humidity}% humidity"
     msg.send text
 
 lookupForecast = (msg, coords, err, location) ->
