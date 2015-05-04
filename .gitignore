@@ -4,3 +4,4 @@ node_modules
 /db
 .hubot_history
 test-data.json
+.idea
