@@ -58,7 +58,7 @@ module.exports = (robot) ->
       else
         msg.send userName + " you haven't logged any projjies yet, or maybe you're done!!! :taconom: :taconom:"
 
-  robot.respond /(i'm|im) done/i, (msg) ->
+  robot.respond /(i‘m|i'm|im) done/i, (msg) ->
     userName = msg.message.user.name.toLowerCase()
     users = robot.brain.usersForFuzzyName(userName)
     if users.length is 1
@@ -66,7 +66,7 @@ module.exports = (robot) ->
       user.currentProjjies = null
       msg.send "Congrats, :clap: " + userName + "! Your projjy list is clear."
 
-  robot.respond  /(i'm|im) (working on|doing) (.*)/i, (msg) ->
+  robot.respond  /(i‘m|i'm|im) (working on|doing) (.*)/i, (msg) ->
     userName = msg.message.user.name.toLowerCase()
     userProjjies = msg.match[3]
     if userProjjies
